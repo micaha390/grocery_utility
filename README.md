@@ -1,2 +1,8 @@
 # grocery_utility
-Uses a .txt file where you enter info off of a receipt and automatically moves it to an excel sheet for tracking.
+Uses a .txt file where you enter info off of a receipt and automatically moves it to an excel sheet for tracking costs.
+
+The .txt file needs to be formatted as follows, with commas separating attributes of each item, and new lines separating items:
+
+NAME OF ITEM, AMOUNT OF ITEM, UNITS, COST, ADDITIONAL TAGS, ..., 
+
+The additional tags will be additional costs such as tax and bottle deposit. The program will run all values after the first 4 mandatory columns through a dictionary to determine added costs.
