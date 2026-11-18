@@ -4,7 +4,7 @@
 
 import sys
 
-TAX_RATE = .06
+TAX_RATE = .07
 BOTTLE_DEPOSIT = .05
 
 # Function: Reads the receipt file you want to add to your spreadsheet
@@ -22,16 +22,18 @@ def readReceipt(receipt_file):
     return text
 
 # Function: Returns the tax for a taxable item
-# Inputs: cost - string - a taxable item's cost
+# Inputs: item - list[str] - the item eligible for tax
 # Outputs: float - the amount of tax on the taxable item
-def tax(cost):
-    return float(cost) * TAX_RATE
+def tax(item):
+    # item[3] is the base cost of the item
+    return float(item[3]) * TAX_RATE
 
 # Function: Returns the bottle deposit for an eligible item
-# Inputs: amount - string - the number of bottles/cans purchased
+# Inputs: item - list[str] - the item eligible for bottle deposit
 # Outputs: float - the bottle deposit cost
-def bottleDeposit(amount):
-    return float(amount) * BOTTLE_DEPOSIT
+def bottleDeposit(item):
+    # item[1] is the amount of the item
+    return float(item[1]) * BOTTLE_DEPOSIT
 
 # Dictionary that maps additional tags onto their functions
 tags = {"tax": tax, "bottle deposit": bottleDeposit}
@@ -39,7 +41,18 @@ tags = {"tax": tax, "bottle deposit": bottleDeposit}
 def main():
     receipt = readReceipt("receipt.txt")
     for item in receipt:
-        print(f"{item[1]} {item[2]} of {item[0]}, costing ${item[3]}")
+        # sets totalCost to the listed price
+        totalCost = float(item[3])
+        # checks to see if there are more attributes to the item than the base 4, then applies additional fees
+        if (len(item) > 4):
+            # creates an iterator to go from the 4th attribute to the end of the items attributes
+            iterator = 4
+            while(iterator < len(item)):
+                totalCost += tags[item[iterator]](item)
+                iterator += 1
+        print(f"{item[1]} {item[2]} of {item[0]}, costing ${totalCost:.2f}")
+
+
 
 if __name__ == "__main__":
     main()
